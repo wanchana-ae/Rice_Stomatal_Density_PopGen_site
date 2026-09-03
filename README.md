@@ -7,4 +7,4 @@ GitHub Pages site for the rice stomatal-density population-genetics project.
   + 20 individual candidate-gene trees), fully self-contained (D3 + jsPDF inlined,
   no external CDN dependency)
 
-Published at: `[https://<your-github-username>.github.io/Rice_Stomatal_Density_PopGen_site/](https://wanchana-ae.github.io/Rice_Stomatal_Density_PopGen_site/)`
+Published at: `[[https://<your-github-username>.github.io/Rice_Stomatal_Density_PopGen_site/](https://wanchana-ae.github.io/Rice_Stomatal_Density_PopGen_site/)](https://wanchana-ae.github.io/Rice_Stomatal_Density_PopGen_site/)`
