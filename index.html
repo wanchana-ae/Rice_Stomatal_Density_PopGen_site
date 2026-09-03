@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rice Stomatal Density PopGen — Project Overview</title>
+<style>
+  :root {
+    --bg: #FBFBF8;
+    --surface: #FFFFFF;
+    --border: #E0E3D9;
+    --text: #1B1F1B;
+    --text-muted: #5C6459;
+    --accent: #2F7A46;
+    --accent-strong: #1E5A30;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 24px;
+  }
+  header h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+  }
+  header .sub {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  nav {
+    background: var(--accent-strong);
+    padding: 0 24px;
+  }
+  nav a {
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 14px;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+  nav a:hover { opacity: 1; text-decoration: underline; }
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  h2 {
+    font-size: 18px;
+    margin-top: 36px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .card a.btn {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 14px;
+  }
+  .card a.btn:hover { background: var(--accent-strong); }
+  ul.timeline { list-style: none; padding-left: 0; }
+  ul.timeline li {
+    padding: 6px 0 6px 18px;
+    border-left: 2px solid var(--border);
+    margin-left: 4px;
+    font-size: 14px;
+    position: relative;
+  }
+  ul.timeline li::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 12px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  code {
+    background: #F0F2EB;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+  footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🧬 Rice Stomatal Density PopGen — Project Overview</h1>
+    <div class="sub">Wanchana · 2026</div>
+  </header>
+
+  <nav>
+    <a href="index.html">Project</a>
+    <a href="tree-viewer.html">Tree Viewer</a>
+  </nav>
+
+  <main>
+    <p>
+      Population-genetics analysis of stomatal-density candidate genes in rice
+      (<em>Oryza sativa</em>). IQ-TREE phylogenies were built both for the pooled
+      SNP panel across all 24 candidate genes (a single combined tree) and
+      separately for each gene's own SNP region, then linked back to variety
+      names and ADMIXTURE K2/K3/K5 population groups.
+    </p>
+
+    <h2>📊 Interactive Tree Viewer</h2>
+    <div class="card">
+      <p>
+        Browse the combined 24-gene tree or any of the 20 individual gene trees
+        (rectangular / circular / unrooted layouts, search by sample or variety,
+        colour by K-group, export the current view as PNG/JPG/PDF, and export the
+        accession list of whichever tree is selected as a CSV).
+      </p>
+      <a class="btn" href="tree-viewer.html">Open the tree viewer →</a>
+    </div>
+
+    <h2>📅 Timeline</h2>
+    <ul class="timeline">
+      <li><b>Combined tree</b> — IQ-TREE (GTR+ASC, 1000 UFBoot / 1000 SH-aLRT) on SNPs pooled across all 24 candidate genes, 553 accessions.</li>
+      <li><b>Per-gene trees</b> — <code>run_all_gene_trees.sh</code> built an independent IQ-TREE per gene; 20 of 24 genes had enough SNPs to resolve a tree (4 skipped — too few SNPs).</li>
+      <li><b>Relabeling &amp; QC</b> — tips matched against <code>variety_metadata.csv</code> and <code>population_groups_K2/K3/K5.csv</code>; unmatched tips shown as <code>UNKNOWN_&lt;code&gt;</code>.</li>
+      <li><b>Interactive viewer</b> — D3-based tree viewer with export (PNG/JPG/PDF/CSV) built on top of the verified tip mapping.</li>
+    </ul>
+
+    <h2>📂 Related Data</h2>
+    <div class="card">
+      <p><b>Source pipeline:</b> <code>run_candidate_combined_tree.sh</code>, <code>run_all_gene_trees.sh</code></p>
+      <p><b>Metadata:</b> <code>variety_metadata.csv</code>, <code>population_groups_K2/K3/K5.csv</code></p>
+      <p><b>iTOL export files</b> (tree + colour annotations) are kept alongside the analysis results, not in this site.</p>
+    </div>
+  </main>
+
+  <footer>Rice Stomatal Density PopGen · GitHub Pages</footer>
+</body>
+</html>
