@@ -118,7 +118,8 @@
   <nav>
     <a href="index.html">Project</a>
     <a href="tree-viewer.html">Tree Viewer</a>
-    <a href="tree-viewer-3krgp.html">Ours vs 3K RGP</a>
+    <a href="tree-viewer-candidate-3krgp.html">Candidate genes vs 3K RGP</a>
+    <a href="tree-viewer-3krgp.html">Genome-wide vs 3K RGP</a>
   </nav>
 
   <main>
@@ -141,7 +142,27 @@
       <a class="btn" href="tree-viewer.html">Open the tree viewer →</a>
     </div>
 
-    <h2>🌾 Ours vs 3,000 Rice Genomes Project</h2>
+    <h2>🌾🧬 Candidate genes vs 3,000 Rice Genomes Project</h2>
+    <div class="card">
+      <p>
+        Same 24 candidate stomatal-density genes as the tree viewer above, but each gene's
+        SNPs are merged (union <code>plink --bmerge</code>) with the matching region from the
+        3,000 Rice Genomes Project's quality-filtered 4.8M-SNP panel — plus a "Combined"
+        tree pooling all genes together. Dropdown switches between the Combined tree and
+        21 individual genes (3 of 24 had too few SNPs even after merging). Same
+        colour-by/layout/search/export controls as the genome-wide 3K RGP viewer, with our
+        own ADMIXTURE colouring limited to K2/K3/K5 at this candidate-region scale.
+      </p>
+      <p style="font-size:13px; color:var(--text-muted);">
+        Note: per-gene trees here are naturally low-resolution (few SNPs spread across
+        ~3,500 taxa) — the Combined tree gives the clearest picture. A handful of genes
+        that needed IQ-TREE's automatic ASC retry currently show fewer taxa than expected;
+        this is flagged in-app and still being investigated.
+      </p>
+      <a class="btn" href="tree-viewer-candidate-3krgp.html">Open the candidate-gene 3K RGP comparison →</a>
+    </div>
+
+    <h2>🌾 Genome-wide vs 3,000 Rice Genomes Project</h2>
     <div class="card">
       <p>
         Genome-wide population tree merging our own 594 site-QC'd accessions with the
