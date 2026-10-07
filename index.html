@@ -4,194 +4,348 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rice Stomatal Density PopGen — Project Overview</title>
+<meta name="description" content="Population genetics of 24 stomatal-density candidate genes in rice, with interactive phylogenetic tree viewers and comparison against the 3,000 Rice Genomes Project.">
 <style>
   :root {
-    --bg: #FBFBF8;
+    --bg: #F6F8F3;
     --surface: #FFFFFF;
-    --border: #E0E3D9;
-    --text: #1B1F1B;
-    --text-muted: #5C6459;
+    --surface-2: #EEF3EA;
+    --border: #DCE3D4;
+    --text: #17201A;
+    --text-muted: #566257;
     --accent: #2F7A46;
-    --accent-strong: #1E5A30;
+    --accent-strong: #1B4D2C;
+    --accent-soft: #DDEFE2;
+    --gold: #C9A227;
+    --hero-from: #123A22;
+    --hero-to: #2F7A46;
+    --shadow: 0 1px 2px rgba(23,32,26,.05), 0 8px 24px rgba(23,32,26,.06);
+    --shadow-hover: 0 2px 4px rgba(23,32,26,.06), 0 16px 36px rgba(23,32,26,.12);
+    --code-bg: #EAEFE4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0F1611;
+      --surface: #172019;
+      --surface-2: #1D2A20;
+      --border: #2A3A2E;
+      --text: #E8EFE6;
+      --text-muted: #9FB0A2;
+      --accent: #5DBB7A;
+      --accent-strong: #8FD6A5;
+      --accent-soft: #1F3A27;
+      --gold: #E0BC4A;
+      --hero-from: #0B2214;
+      --hero-to: #1E5A30;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+      --shadow-hover: 0 2px 4px rgba(0,0,0,.5), 0 16px 36px rgba(0,0,0,.45);
+      --code-bg: #223326;
+    }
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
   }
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 22px 24px;
-  }
-  header h1 {
-    margin: 0 0 4px;
-    font-size: 22px;
-  }
-  header .sub {
-    color: var(--text-muted);
-    font-size: 14px;
-  }
-  nav {
-    background: var(--accent-strong);
-    padding: 0 24px;
-  }
-  nav a {
-    display: inline-block;
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 14px;
-    font-size: 14px;
-    opacity: 0.9;
-  }
-  nav a:hover { opacity: 1; text-decoration: underline; }
-  main {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 28px 24px 60px;
-  }
-  h2 {
-    font-size: 18px;
-    margin-top: 36px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 6px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin: 14px 0;
-  }
-  .card a.btn {
-    display: inline-block;
-    margin-top: 8px;
-    background: var(--accent);
-    color: #fff;
-    text-decoration: none;
-    padding: 8px 14px;
-    border-radius: 7px;
-    font-size: 14px;
-  }
-  .card a.btn:hover { background: var(--accent-strong); }
-  ul.timeline { list-style: none; padding-left: 0; }
-  ul.timeline li {
-    padding: 6px 0 6px 18px;
-    border-left: 2px solid var(--border);
-    margin-left: 4px;
-    font-size: 14px;
-    position: relative;
-  }
-  ul.timeline li::before {
-    content: "";
-    position: absolute;
-    left: -5px;
-    top: 12px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
+  a { color: inherit; }
   code {
-    background: #F0F2EB;
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-size: 12.5px;
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: .86em;
   }
+
+  /* ---------- top nav ---------- */
+  .topnav {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--hero-from) 92%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .topnav .inner {
+    max-width: 1080px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; gap: 4px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .topnav .inner::-webkit-scrollbar { display: none; }
+  .brand {
+    font-weight: 700; color: #fff; text-decoration: none;
+    padding: 14px 16px 14px 0; margin-right: 8px; white-space: nowrap;
+    display: flex; align-items: center; gap: 8px; font-size: 15px;
+  }
+  .topnav a.link {
+    color: rgba(255,255,255,.78); text-decoration: none; white-space: nowrap;
+    padding: 14px 12px; font-size: 14px; border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .topnav a.link:hover { color: #fff; }
+  .topnav a.link.active { color: #fff; border-bottom-color: var(--gold); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative; overflow: hidden; color: #fff;
+    background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  }
+  .hero::before {            /* faint "stomata" ring pattern */
+    content: ""; position: absolute; inset: 0; opacity: .13;
+    background-image:
+      radial-gradient(ellipse 26px 14px at 50% 50%, transparent 55%, #fff 57%, #fff 63%, transparent 65%),
+      radial-gradient(ellipse 9px 5px at 50% 50%, #fff 60%, transparent 62%);
+    background-size: 84px 64px, 84px 64px;
+    background-position: 0 0, 0 0;
+    -webkit-mask-image: linear-gradient(110deg, transparent 20%, #000 100%);
+            mask-image: linear-gradient(110deg, transparent 20%, #000 100%);
+  }
+  .hero .inner {
+    position: relative; max-width: 1080px; margin: 0 auto;
+    padding: 64px 20px 76px;
+  }
+  .eyebrow {
+    display: inline-block; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+    padding: 5px 12px; border-radius: 999px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    margin: 0 0 14px; font-size: clamp(30px, 5.2vw, 50px); line-height: 1.12;
+    letter-spacing: -.02em; font-weight: 750; max-width: 15em;
+  }
+  .hero h1 em { font-style: italic; color: #BFE8CC; font-weight: 650; }
+  .hero p.lead {
+    margin: 0 0 28px; max-width: 46em; font-size: clamp(15px, 2vw, 17.5px);
+    color: rgba(255,255,255,.88);
+  }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .cta a {
+    text-decoration: none; font-weight: 600; font-size: 15px;
+    padding: 12px 20px; border-radius: 10px; transition: transform .15s, background .15s;
+  }
+  .cta a.primary { background: #fff; color: var(--hero-from); }
+  .cta a.primary:hover { transform: translateY(-2px); background: #EAF6EE; }
+  .cta a.ghost { border: 1px solid rgba(255,255,255,.4); color: #fff; }
+  .cta a.ghost:hover { background: rgba(255,255,255,.12); }
+
+  /* ---------- layout ---------- */
+  main { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* stat strip overlaps the hero */
+  .stats {
+    margin-top: -38px; position: relative; z-index: 2;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .stat { background: var(--surface); padding: 18px 20px; }
+  .stat .num { font-size: 28px; font-weight: 750; letter-spacing: -.02em; color: var(--accent-strong); line-height: 1.1; }
+  .stat .lbl { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  h2.section {
+    font-size: 24px; letter-spacing: -.01em; margin: 56px 0 6px;
+  }
+  .section-sub { color: var(--text-muted); margin: 0 0 22px; font-size: 15px; }
+
+  /* ---------- viewer cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .vcard {
+    display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 24px; box-shadow: var(--shadow);
+    transition: transform .18s, box-shadow .18s, border-color .18s;
+  }
+  .vcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
+  .icon {
+    width: 46px; height: 46px; border-radius: 12px; margin-bottom: 16px;
+    background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center;
+  }
+  .icon svg { width: 26px; height: 26px; }
+  .vcard h3 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.01em; }
+  .tag { font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
+  .vcard p { margin: 0 0 14px; font-size: 14.5px; color: var(--text-muted); }
+  .vcard .note {
+    font-size: 13px; background: var(--surface-2); border-left: 3px solid var(--gold);
+    padding: 9px 12px; border-radius: 0 8px 8px 0; color: var(--text-muted);
+  }
+  .vcard .open {
+    margin-top: auto; padding-top: 6px; text-decoration: none;
+    font-weight: 650; font-size: 14.5px; color: var(--accent);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .vcard .open span { transition: transform .15s; }
+  .vcard:hover .open span { transform: translateX(4px); }
+  .vcard .grow { flex: 1; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+  .chip {
+    font-size: 12px; padding: 3px 9px; border-radius: 999px;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted);
+  }
+
+  /* ---------- timeline ---------- */
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; position: relative; }
+  ol.steps::before {
+    content: ""; position: absolute; left: 17px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--border);
+  }
+  ol.steps li {
+    counter-increment: s; position: relative; padding: 0 0 22px 56px; font-size: 15px;
+  }
+  ol.steps li:last-child { padding-bottom: 0; }
+  ol.steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 14px;
+    display: grid; place-items: center; box-shadow: 0 0 0 5px var(--bg);
+  }
+  ol.steps b { display: block; font-size: 16px; margin-bottom: 2px; }
+  ol.steps span { color: var(--text-muted); }
+
+  /* ---------- data panel ---------- */
+  .panel {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 6px 24px; box-shadow: var(--shadow);
+  }
+  .row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+  .row:last-child { border-bottom: 0; }
+  .row .k { font-weight: 650; color: var(--text); }
+  .row .v { color: var(--text-muted); }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; gap: 4px; } }
+
   footer {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 12px;
-    padding: 20px;
+    border-top: 1px solid var(--border); text-align: center;
+    color: var(--text-muted); font-size: 13px; padding: 28px 20px 40px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
   }
 </style>
 </head>
 <body>
-  <header>
-    <h1>🧬 Rice Stomatal Density PopGen — Project Overview</h1>
-    <div class="sub">Wanchana · 2026</div>
-  </header>
 
-  <nav>
-    <a href="index.html">Project</a>
-    <a href="tree-viewer.html">Tree Viewer</a>
-    <a href="tree-viewer-candidate-3krgp.html">Candidate genes vs 3K RGP</a>
-    <a href="tree-viewer-3krgp.html">Genome-wide vs 3K RGP</a>
+  <nav class="topnav" aria-label="Site">
+    <div class="inner">
+      <a class="brand" href="index.html">🧬 Stomatal PopGen</a>
+      <a class="link active" href="index.html">Project</a>
+      <a class="link" href="tree-viewer.html">Tree Viewer</a>
+      <a class="link" href="tree-viewer-candidate-3krgp.html">Candidate genes vs 3K RGP</a>
+      <a class="link" href="tree-viewer-3krgp.html">Genome-wide vs 3K RGP</a>
+    </div>
   </nav>
 
+  <header class="hero">
+    <div class="inner">
+      <span class="eyebrow">Population genetics · Rice</span>
+      <h1>Stomatal-density candidate genes in <em>Oryza sativa</em></h1>
+      <p class="lead">
+        IQ-TREE phylogenies built both for the pooled SNP panel across all 24 candidate genes
+        (a single combined tree) and separately for each gene's own SNP region, then linked back
+        to variety names and ADMIXTURE population groups, and compared against the
+        3,000 Rice Genomes Project.
+      </p>
+      <div class="cta">
+        <a class="primary" href="tree-viewer.html">Open the tree viewer →</a>
+        <a class="ghost" href="#viewers">See all viewers</a>
+      </div>
+    </div>
+  </header>
+
   <main>
-    <p>
-      Population-genetics analysis of stomatal-density candidate genes in rice
-      (<em>Oryza sativa</em>). IQ-TREE phylogenies were built both for the pooled
-      SNP panel across all 24 candidate genes (a single combined tree) and
-      separately for each gene's own SNP region, then linked back to variety
-      names and ADMIXTURE K2/K3/K5 population groups.
-    </p>
 
-    <h2>📊 Interactive Tree Viewer</h2>
-    <div class="card">
-      <p>
-        Browse the combined 24-gene tree or any of the 20 individual gene trees
-        (rectangular / circular / unrooted layouts, search by sample or variety,
-        colour by K-group, export the current view as PNG/JPG/PDF, and export the
-        accession list of whichever tree is selected as a CSV).
-      </p>
-      <a class="btn" href="tree-viewer.html">Open the tree viewer →</a>
+    <section class="stats" aria-label="Key numbers">
+      <div class="stat"><div class="num">24</div><div class="lbl">candidate genes</div></div>
+      <div class="stat"><div class="num">553</div><div class="lbl">accessions in the combined tree</div></div>
+      <div class="stat"><div class="num">594</div><div class="lbl">own site-QC'd accessions (genome-wide)</div></div>
+      <div class="stat"><div class="num">3,618</div><div class="lbl">tips in the 3K RGP merged tree</div></div>
+      <div class="stat"><div class="num">86,410</div><div class="lbl">shared SNPs after merge</div></div>
+    </section>
+
+    <h2 class="section" id="viewers">Interactive viewers</h2>
+    <p class="section-sub">Three D3-based viewers share the same controls: layouts, search, colour-by, and export.</p>
+
+    <div class="cards">
+
+      <article class="vcard">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6v4H4zM4 15h6v4H4zM14 10h6v4h-6z"/><path d="M10 7h2v5h2M10 17h2v-5"/></svg>
+        </div>
+        <div class="tag">Our accessions</div>
+        <h3>Interactive Tree Viewer</h3>
+        <div class="chips"><span class="chip">rectangular</span><span class="chip">circular</span><span class="chip">unrooted</span><span class="chip">PNG · JPG · PDF · CSV</span></div>
+        <p class="grow">
+          Browse the combined 24-gene tree or any of the 20 individual gene trees. Search by
+          sample or variety, colour by K-group, export the current view as PNG/JPG/PDF, and
+          export the accession list of whichever tree is selected as a CSV.
+        </p>
+        <a class="open" href="tree-viewer.html">Open the tree viewer <span>→</span></a>
+      </article>
+
+      <article class="vcard">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9"/><path d="M12 13c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3 2-5 6-5 0 3.500-2 5-6 5z"/></svg>
+        </div>
+        <div class="tag">Candidate region + 3K RGP</div>
+        <h3>Candidate genes vs 3,000 Rice Genomes</h3>
+        <div class="chips"><span class="chip">Combined + per-gene</span><span class="chip">4.8M-SNP panel</span><span class="chip">K2 · K3 · K5</span></div>
+        <p>
+          Same 24 genes, but each gene's SNPs are merged (union <code>plink --bmerge</code>) with
+          the matching region of the 3K RGP quality-filtered panel, plus a "Combined" tree
+          pooling all genes. A dropdown switches between the Combined tree and 21 individual
+          genes (3 of 24 had too few SNPs even after merging).
+        </p>
+        <p class="note grow">
+          Per-gene trees here are naturally low-resolution (few SNPs across ~3,500 taxa); the
+          Combined tree gives the clearest picture. A handful of genes that needed IQ-TREE's
+          automatic ASC retry currently show fewer taxa than expected; this is flagged in-app
+          and still being investigated.
+        </p>
+        <a class="open" href="tree-viewer-candidate-3krgp.html">Open the candidate-gene comparison <span>→</span></a>
+      </article>
+
+      <article class="vcard">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
+        </div>
+        <div class="tag">Genome-wide + 3K RGP</div>
+        <h3>Genome-wide vs 3,000 Rice Genomes</h3>
+        <div class="chips"><span class="chip">3K RGP K9</span><span class="chip">ADMIXTURE K2–K15</span><span class="chip">advanced panel</span></div>
+        <p class="grow">
+          Genome-wide tree merging our 594 site-QC'd accessions with the 3K RGP's LD-pruned panel
+          (3,024 accessions, 3,618 tips, 86,410 shared SNPs). Colour by 3K RGP subpopulation
+          (indica / japonica / Aus / Basmati groups), by "ours vs 3K RGP", or by our own
+          ADMIXTURE groups. Adds rotation, arc, invert, cladogram mode and font/line styling.
+        </p>
+        <a class="open" href="tree-viewer-3krgp.html">Open the 3K RGP comparison <span>→</span></a>
+      </article>
+
     </div>
 
-    <h2>🌾🧬 Candidate genes vs 3,000 Rice Genomes Project</h2>
-    <div class="card">
-      <p>
-        Same 24 candidate stomatal-density genes as the tree viewer above, but each gene's
-        SNPs are merged (union <code>plink --bmerge</code>) with the matching region from the
-        3,000 Rice Genomes Project's quality-filtered 4.8M-SNP panel — plus a "Combined"
-        tree pooling all genes together. Dropdown switches between the Combined tree and
-        21 individual genes (3 of 24 had too few SNPs even after merging). Same
-        colour-by/layout/search/export controls as the genome-wide 3K RGP viewer, with our
-        own ADMIXTURE colouring limited to K2/K3/K5 at this candidate-region scale.
-      </p>
-      <p style="font-size:13px; color:var(--text-muted);">
-        Note: per-gene trees here are naturally low-resolution (few SNPs spread across
-        ~3,500 taxa) — the Combined tree gives the clearest picture. A handful of genes
-        that needed IQ-TREE's automatic ASC retry currently show fewer taxa than expected;
-        this is flagged in-app and still being investigated.
-      </p>
-      <a class="btn" href="tree-viewer-candidate-3krgp.html">Open the candidate-gene 3K RGP comparison →</a>
+    <h2 class="section">How it was built</h2>
+    <p class="section-sub">From SNP panel to interactive trees.</p>
+
+    <ol class="steps">
+      <li><b>Combined tree</b><span>IQ-TREE (GTR+ASC, 1000 UFBoot / 1000 SH-aLRT) on SNPs pooled across all 24 candidate genes, 553 accessions.</span></li>
+      <li><b>Per-gene trees</b><span><code>run_all_gene_trees.sh</code> built an independent IQ-TREE per gene; 20 of 24 genes had enough SNPs to resolve a tree (4 skipped — too few SNPs).</span></li>
+      <li><b>Relabeling &amp; QC</b><span>Tips matched against <code>variety_metadata.csv</code> and <code>population_groups_K2/K3/K5.csv</code>; unmatched tips shown as <code>UNKNOWN_&lt;code&gt;</code>.</span></li>
+      <li><b>Interactive viewer</b><span>D3-based tree viewer with export (PNG/JPG/PDF/CSV) built on top of the verified tip mapping.</span></li>
+    </ol>
+
+    <h2 class="section">Related data</h2>
+    <p class="section-sub">Where the underlying files live.</p>
+
+    <div class="panel">
+      <div class="row"><div class="k">Source pipeline</div><div class="v"><code>run_candidate_combined_tree.sh</code> · <code>run_all_gene_trees.sh</code></div></div>
+      <div class="row"><div class="k">Metadata</div><div class="v"><code>variety_metadata.csv</code> · <code>population_groups_K2/K3/K5.csv</code></div></div>
+      <div class="row"><div class="k">iTOL exports</div><div class="v">Tree + colour annotation files are kept alongside the analysis results, not in this site.</div></div>
     </div>
 
-    <h2>🌾 Genome-wide vs 3,000 Rice Genomes Project</h2>
-    <div class="card">
-      <p>
-        Genome-wide population tree merging our own 594 site-QC'd accessions with the
-        3,000 Rice Genomes Project's LD-pruned panel (3,024 accessions, 3,618 tips total,
-        86,410 shared SNPs after <code>plink --bmerge</code>). Colour by 3K RGP subpopulation
-        (K9: indica/japonica/Aus/Basmati groups), by "ours vs 3K RGP", or by our own
-        genome-wide ADMIXTURE groups (K2–K15). Same layouts/search/export as the
-        gene-tree viewer, plus an advanced panel (rotation, arc, invert, cladogram mode,
-        font/line styling).
-      </p>
-      <a class="btn" href="tree-viewer-3krgp.html">Open the 3K RGP comparison →</a>
-    </div>
-
-    <h2>📅 Timeline</h2>
-    <ul class="timeline">
-      <li><b>Combined tree</b> — IQ-TREE (GTR+ASC, 1000 UFBoot / 1000 SH-aLRT) on SNPs pooled across all 24 candidate genes, 553 accessions.</li>
-      <li><b>Per-gene trees</b> — <code>run_all_gene_trees.sh</code> built an independent IQ-TREE per gene; 20 of 24 genes had enough SNPs to resolve a tree (4 skipped — too few SNPs).</li>
-      <li><b>Relabeling &amp; QC</b> — tips matched against <code>variety_metadata.csv</code> and <code>population_groups_K2/K3/K5.csv</code>; unmatched tips shown as <code>UNKNOWN_&lt;code&gt;</code>.</li>
-      <li><b>Interactive viewer</b> — D3-based tree viewer with export (PNG/JPG/PDF/CSV) built on top of the verified tip mapping.</li>
-    </ul>
-
-    <h2>📂 Related Data</h2>
-    <div class="card">
-      <p><b>Source pipeline:</b> <code>run_candidate_combined_tree.sh</code>, <code>run_all_gene_trees.sh</code></p>
-      <p><b>Metadata:</b> <code>variety_metadata.csv</code>, <code>population_groups_K2/K3/K5.csv</code></p>
-      <p><b>iTOL export files</b> (tree + colour annotations) are kept alongside the analysis results, not in this site.</p>
-    </div>
   </main>
 
-  <footer>Rice Stomatal Density PopGen · GitHub Pages</footer>
+  <footer>Rice Stomatal Density PopGen · Wanchana · 2026 · GitHub Pages</footer>
 </body>
 </html>
